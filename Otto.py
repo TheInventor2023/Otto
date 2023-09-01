@@ -108,22 +108,8 @@ try:
                 audio = r.record(source)
             command = r.recognize_google(audio)
 
-            past_responses = []
-            try:
-                with open("past_responses.txt", "r") as file:
-                    past_responses = [line.strip() for line in file.readlines()]
-            except FileNotFoundError:
-                pass
-            
-            with open('past_conversations.txt', 'r') as file:
-                past_conversations = file.read()
-
-
-            current_time = datetime.now()
-
-            file_content = ""
             user_messages = [
-                {"role": "system", "content": f"You are a robot called Otto. Your creator is a boy called Ezra. We live in a town in Illinois called Geneva. You were made in a makerspace called FOX.BUILD. Don't make up anything I did'nt tell you unless I ask.  past conversations: {past_conversations}  information about people: {people_info}  commands: {commands}" },
+                {"role": "system", "content": "You are a AI voice assistant called Otto."},
                 {"role": "user", "content": command}
             ]
 
@@ -135,12 +121,6 @@ try:
             )
 
             ai_response = ""
-            for chunk in response:
-                ai_response += chunk.choices[0].delta.get("content", "")
-                file_content += f"User: {command}\nAI: {ai_response}\n\n"
-                save_to_file(file_content)
-            with open('past_conversations.txt', 'a') as file:
-                file.write(f"Human: {command}\nAI: {ai_response}\n\n")
 
 
             print("Otto:", ai_response)
